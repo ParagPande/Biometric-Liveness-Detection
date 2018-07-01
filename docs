@@ -1,0 +1,32 @@
+Step 1:
+Installing modules -> dlib, cmake, imutils, skikit learn and scipy
+
+Step 2:
+Defining the eye aspect ratio
+This function accepts a single required parameter, the (x, y)-coordinates of the facial landmarks for a given eye .
+
+Lines 16 and 17 compute the distance between the two sets of vertical eye landmarks while Line 21 computes the distance between horizontal eye landmarks.
+
+Finally, Line 24 combines both the numerator and denominator to arrive at the final eye aspect ratio, as described in Figure 4 above.
+
+Line 27 then returns the eye aspect ratio to the calling function.
+
+Step 3:
+Importing the shape predictor
+--shape-predictor : This is the path to dlib’s pre-trained facial landmark detector. You can download the detector along with the source code + example videos to this tutorial using the “Downloads” section of the bottom of this blog post.
+--video : This optional switch controls the path to an input video file residing on disk. If you instead want to work with a live video stream, simply omit this switch when executing the script.
+
+Step 4:
+When determining if a blink is taking place in a video stream, we need to calculate the eye aspect ratio.
+
+If the eye aspect ratio falls below a certain threshold and then rises above the threshold, then we’ll register a “blink” — the EYE_AR_THRESH  is this threshold value. We default it to a value of 0.3  as this is what has worked best for my applications, but you may need to tune it for your own application.
+
+We then have an important constant, EYE_AR_CONSEC_FRAME  — this value is set to 3  to indicate that three successive frames with an eye aspect ratio less than EYE_AR_THRESH  must happen in order for a blink to be registered.
+
+Again, depending on the frame processing throughput rate of your pipeline, you may need to raise or lower this number for your own implementation.
+
+Lines 44 and 45 initialize two counters. COUNTER  is the total number of successive frames that have an eye aspect ratio less than EYE_AR_THRESH  while TOTAL  is the total number of blinks that have taken place while the script has been running.
+
+Now that our imports, command line arguments, and constants have been taken care of, we can initialize dlib’s face detector and facial landmark detector:
+
+Step 5:
